@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         newsViewModel.getListResponseLiveData().observe(this, Observer {
             handleListResponse(it)
         })
+        swipe_refresh.setOnRefreshListener {
+            newsViewModel.refreshData()
+        }
     }
 
     private fun initViews() {
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             State.SUCCESS -> {
                 progress_bar.visibility = View.GONE
                 txt_error.visibility = View.GONE
+                swipe_refresh.isRefreshing = false
             }
             State.ERROR -> {
                 progress_bar.visibility = View.GONE

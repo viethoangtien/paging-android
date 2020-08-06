@@ -17,4 +17,8 @@ class NewsDataSourceFactory(
         newsDataSourceLiveData.postValue(newsDataSource)
         return newsDataSource
     }
+
+    fun refreshData() {
+        newsDataSourceLiveData.value?.invalidate()
+    }
 }

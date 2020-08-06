@@ -7,7 +7,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.paginglibrary.network.api.NetworkService
 import com.example.paginglibrary.network.data.News
-import com.example.paginglibrary.network.data.base.ObjectResponse
+import com.example.paginglibrary.network.data.base.ListResponse
 import com.example.paginglibrary.paging.NewsDataSource
 import com.example.paginglibrary.paging.NewsDataSourceFactory
 import io.reactivex.disposables.CompositeDisposable
@@ -33,6 +33,13 @@ class NewsViewModel : ViewModel() {
 
     }
 
-    fun getListResponseLiveData() = Transformations.switchMap(newsDataSourceFactory.newsDataSourceLiveData, NewsDataSource::listResponseNewsLiveData)
+    fun getListResponseLiveData(): LiveData<ListResponse<News>> = Transformations.switchMap(
+        newsDataSourceFactory.newsDataSourceLiveData,
+        NewsDataSource::listResponseNewsLiveData
+    )
+
+    fun refreshData() {
+        newsDataSourceFactory.refreshData()
+    }
 
 }
