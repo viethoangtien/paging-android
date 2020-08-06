@@ -60,12 +60,15 @@ class MainActivity : AppCompatActivity() {
     private fun handleListResponse(response: ListResponse<*>) {
         when (response.type) {
             State.LOADING -> {
-                progress_bar.visibility = View.VISIBLE
+                if (newsViewModel.isRefreshing.value != true) {
+                    progress_bar.visibility = View.VISIBLE
+                }
             }
             State.SUCCESS -> {
                 progress_bar.visibility = View.GONE
                 txt_error.visibility = View.GONE
                 swipe_refresh.isRefreshing = false
+                newsViewModel.hideRefresh()
             }
             State.ERROR -> {
                 progress_bar.visibility = View.GONE

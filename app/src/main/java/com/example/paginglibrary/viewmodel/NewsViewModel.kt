@@ -1,6 +1,7 @@
 package com.example.paginglibrary.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
@@ -18,6 +19,7 @@ class NewsViewModel : ViewModel() {
     private val newsDataSourceFactory: NewsDataSourceFactory
     private val pageSize = 10
     var pageListNews: LiveData<PagedList<News>>
+    var isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         newsDataSourceFactory = NewsDataSourceFactory(networkService, compositeDisposable)
@@ -34,12 +36,18 @@ class NewsViewModel : ViewModel() {
     }
 
     fun getListResponseLiveData(): LiveData<ListResponse<News>> = Transformations.switchMap(
-        newsDataSourceFactory.newsDataSourceLiveData,
-        NewsDataSource::listResponseNewsLiveData
-    )
+        newsDataSourceFactory.newsDataSourceLiveData
+    ) {
+        it.listResponseNewsLiveData
+    }
 
     fun refreshData() {
         newsDataSourceFactory.refreshData()
+        isRefreshing.value = true
+    }
+
+    fun hideRefresh() {
+        isRefreshing.value = false
     }
 
 }

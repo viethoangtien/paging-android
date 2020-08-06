@@ -1,12 +1,14 @@
 package com.example.paginglibrary.paging
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.PageKeyedDataSource
 import com.example.paginglibrary.network.api.NetworkService
 import com.example.paginglibrary.network.data.News
 import com.example.paginglibrary.network.data.State
 import com.example.paginglibrary.network.data.base.ListResponse
 import com.example.paginglibrary.network.data.base.ObjectResponse
+import com.example.paginglibrary.viewmodel.NewsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -16,6 +18,7 @@ class NewsDataSource(
     private val compositeDisposable: CompositeDisposable
 ) : PageKeyedDataSource<Int, News>() {
     var listResponseNewsLiveData: MutableLiveData<ListResponse<News>> = MutableLiveData()
+
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
@@ -30,8 +33,10 @@ class NewsDataSource(
                 }
                 .subscribe({
                     listResponseNewsLiveData.postValue(ListResponse.success(it.data!!))
-                    callback.onResult(it.data
-                        , null, 2)
+                    callback.onResult(
+                        it.data
+                        , null, 2
+                    )
                 }, {
                     listResponseNewsLiveData.postValue(ListResponse.error(it))
                 })
